@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CH">
+<meta charset="utf-8">
+
+<body onload="AutoFresh()">
+    <style>
+
+    button{
+        width: 50px;
+        height: 50px;
+    }
+    
+    p{
+        margin: 30px;
+    }
+
+    h1{
+        margin: 10px;
+
+    }
+    h{
+        margin: 30px;
+    }
+
+    div{
+        height: auto;
+        width: auto;
+        border-width: 2px;
+        border-style: solid;
+        border-color: black;
+    }        
+
+    input{
+        height: 50px;
+        width: 300px;
+        border-width: 2px;
+        border-style: outset;
+        border-color: black;
+    }
+
+
+    </style>
+    <script>
+        var text
+        var tmp;
+        var xmlhttp;
+            if (window.XMLHttpRequest) {
+                xmlhttp = new XMLHttpRequest();
+            }
+            else {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+        i = 0;
+        function AutoFresh() {
+            i++;
+            
+            document.getElementById("test").innerHTML = "刷新"+i+"次";
+
+            setTimeout("AutoFresh()", 500);
+            fresh();
+
+        }
+
+        function fresh(){
+                xmlhttp.onreadystatechange = function(){
+                if(xmlhttp.readyState == 4&& xmlhttp.status == 200){
+                    if(tmp==xmlhttp.responseText||text==xmlhttp.responseText){
+                    }else{
+                    tmp = xmlhttp.responseText;
+                    addmessage(xmlhttp.responseText);
+                    }
+                }
+            };
+            xmlhttp.open("GET", "fresh", true);
+            xmlhttp.send();
+
+        }
+
+        function addmessage(inside){
+            var para = document.createElement("p");
+            var node = document.createTextNode(inside);
+            para.appendChild(node);
+            var element = document.getElementById("div1");
+            element.appendChild(para);
+            
+        }
+
+        function sendmessage(){
+            text = document.getElementById("message").value;
+            document.getElementById("message").value = ""; 
+            xmlhttp.onreadystatechange = function(){
+                if(xmlhttp.readyState == 4&& xmlhttp.status == 200){
+                    addmessage(xmlhttp.responseText);
+                    
+                }
+            };
+            xmlhttp.open("GET", "addmessage?text="+text, true);
+            xmlhttp.send();
+            
+        }
+
+
+
+    </script>
+    
+   
+    <!--
+
+    <input id="name"></input>
+
+    -->
+    <input id="message"></input>
+    <button onclick="sendmessage()">
+    send</button>
+
+    <div id="div1">
+        
+        <h1 id="test1">Message</h1>
+        <h id="test">hello</h>
+    
+    </div>
+   
+  
+</body>
